@@ -1,7 +1,7 @@
 <?php
-session_start(); include '../koneksi.php';
+session_start(); include '../../koneksi.php';
 if($_SESSION['status'] != "login"){ header("location:../index.php?pesan=belum_login"); exit(); }
-include 'header.php';
+include '../template/header.php';
 ?>
 <div class="container-fluid">
     <div class="mb-4 text-danger"><h3 class="fw-bold">Penarikan Tunai</h3></div>
@@ -18,4 +18,4 @@ include 'header.php';
     if (urlParams.get('pesan') === 'saldo_kurang') { Swal.fire({ icon: 'error', title: 'Gagal', text: 'Saldo tidak mencukupi!', confirmButtonColor: '#d33' }); }
     else if (urlParams.get('status') === 'sukses') { Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Penarikan sukses!', confirmButtonColor: '#198754' }); }
 </script>
-<?php include 'footer.php'; ?>
+<?php include '../template/footer.php'; ?>

@@ -1,9 +1,9 @@
 <?php
 session_start();
-include '../koneksi.php';
+include '../../koneksi.php';
 
 if($_SESSION['status'] != "login"){
-    header("location:../index.php");
+    header("location:../../index.php");
     exit();
 }
 

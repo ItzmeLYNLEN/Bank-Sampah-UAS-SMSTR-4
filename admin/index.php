@@ -6,7 +6,7 @@ $nasabah = mysqli_query($conn, "SELECT COUNT(*) as total FROM nasabah");
 $t_nasabah = mysqli_fetch_assoc($nasabah);
 $saldo = mysqli_query($conn, "SELECT SUM(saldo) as total FROM nasabah");
 $t_saldo = mysqli_fetch_assoc($saldo);
-include 'header.php';
+include 'template/header.php';
 ?>
 <div class="container-fluid">
     <div class="mb-4">
@@ -32,4 +32,4 @@ include 'header.php';
         </div>
     </div>
 </div>
-<?php include 'footer.php'; ?>
+<?php include 'template/footer.php'; ?>

@@ -10,7 +10,7 @@ if($_SESSION['status'] != "login"){
 $tgl_awal = isset($_GET['tgl_awal']) ? $_GET['tgl_awal'] : date('Y-m-01');
 $tgl_akhir = isset($_GET['tgl_akhir']) ? $_GET['tgl_akhir'] : date('Y-m-t');
 
-include 'header.php';
+include 'template/header.php';
 ?>
 
 <div class="container-fluid">
@@ -121,4 +121,4 @@ include 'header.php';
     </div>
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'template/footer.php'; ?>

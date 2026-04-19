@@ -68,12 +68,12 @@
             <hr>
         </div>
         <div class="nav flex-column">
-            <a href="index.php" class="nav-link"><i class="fa-solid fa-gauge"></i> Dashboard</a>
-            <a href="data_nasabah.php" class="nav-link"><i class="fa-solid fa-users"></i> Data Nasabah</a>
-            <a href="katalog_sampah.php" class="nav-link"><i class="fa-solid fa-tags"></i> Master Katalog</a>
-            <a href="setoran.php" class="nav-link"><i class="fa-solid fa-arrow-down"></i> Setoran</a>
-            <a href="penarikan.php" class="nav-link"><i class="fa-solid fa-arrow-up"></i> Penarikan</a>
-            <a href="laporan.php" class="nav-link"><i class="fa-solid fa-file-lines"></i> Laporan</a>
+            <a href="../index.php" class="nav-link"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+            <a href="nasabah/data_nasabah.php" class="nav-link"><i class="fa-solid fa-users"></i> Data Nasabah</a>
+            <a href="../jenis_sampah/katalog_sampah.php" class="nav-link"><i class="fa-solid fa-tags"></i> Master Katalog</a>
+            <a href="../setor/setoran.php" class="nav-link"><i class="fa-solid fa-arrow-down"></i> Setoran</a>
+            <a href="../penarikan/penarikan.php" class="nav-link"><i class="fa-solid fa-arrow-up"></i> Penarikan</a>
+            <a href="../laporan.php" class="nav-link"><i class="fa-solid fa-file-lines"></i> Laporan</a>
             <div class="mt-5 p-3">
                 <a href="#" onclick="konfirmasiLogout()" class="btn btn-outline-danger w-100 fw-bold">
                     <i class="fa-solid fa-right-from-bracket"></i> Logout

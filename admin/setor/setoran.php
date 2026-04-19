@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../koneksi.php';
+include '../../koneksi.php';
 
 if($_SESSION['status'] != "login"){
     header("location:../index.php?pesan=belum_login");
@@ -13,7 +13,7 @@ while($dk = mysqli_fetch_array($k)){
     $opsi_kategori .= "<option value='".$dk['id_kategori']."'>".$dk['nama_kategori']." (Rp ".number_format($dk['harga_per_kg'],0,',','.')."/kg)</option>";
 }
 
-include 'header.php';
+include '../template/header.php';
 ?>
 
 <div class="container-fluid">
@@ -108,7 +108,14 @@ include 'header.php';
             text: 'Transaksi setoran telah dicatat!',
             confirmButtonColor: '#198754'
         });
+    } else if (urlParams.get('status') === 'gagal') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: 'Terjadi kesalahan saat menyimpan transaksi.',
+            confirmButtonColor: '#d33'
+        });
     }
 </script>
 
-<?php include 'footer.php'; ?>
+<?php include '../template/footer.php'; ?>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../koneksi.php';
+include '../../koneksi.php';
 
 $id_nasabah = $_POST['id_nasabah'];
 $id_kategori_array = $_POST['id_kategori'];

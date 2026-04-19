@@ -1,13 +1,13 @@
 <?php
 session_start();
-include '../koneksi.php';
+include '../../koneksi.php';
 
 if($_SESSION['status'] != "login"){
-    header("location:../index.php?pesan=belum_login");
+    header("location:../../index.php?pesan=belum_login");
     exit();
 }
 
-include 'header.php';
+include '../template/header.php';
 ?>
 
 <div class="container-fluid">
@@ -134,4 +134,4 @@ include 'header.php';
     }
 </script>
 
-<?php include 'footer.php'; ?>
+<?php include '../template/footer.php'; ?>
