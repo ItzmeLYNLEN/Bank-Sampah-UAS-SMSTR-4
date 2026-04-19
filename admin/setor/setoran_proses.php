@@ -1,39 +1,27 @@
 <?php
 session_start();
 include '../../koneksi.php';
-
-$id_nasabah = $_POST['id_nasabah'];
-$id_kategori_array = $_POST['id_kategori'];
-$berat_array = $_POST['berat'];
-$id_admin = $_SESSION['id_admin'];
-$tanggal = date('Y-m-d');
-
-$total_seluruh_harga = 0;
-
-foreach($id_kategori_array as $key => $id_kat){
-    if($id_kat != ""){
-        $q = mysqli_query($conn, "SELECT harga_per_kg FROM kategori_sampah WHERE id_kategori='$id_kat'");
+$id_n = $_POST['id_nasabah']; $id_k = $_POST['id_kategori']; $b = $_POST['berat']; $id_a = $_SESSION['id_admin']; 
+$t = date('Y-m-d H:i:s');
+$total = 0;
+foreach($id_k as $key => $val){
+    if($val != ""){
+        $q = mysqli_query($conn, "SELECT harga_per_kg FROM kategori_sampah WHERE id_kategori='$val'");
         $d = mysqli_fetch_assoc($q);
-        $total_seluruh_harga += ($berat_array[$key] * $d['harga_per_kg']);
+        $total += ($b[$key] * $d['harga_per_kg']);
     }
 }
-
-mysqli_query($conn, "INSERT INTO setoran (tanggal_setor, id_nasabah, total_seluruh_harga, id_admin) VALUES ('$tanggal', '$id_nasabah', '$total_seluruh_harga', '$id_admin')");
-
-$id_setoran_induk = mysqli_insert_id($conn);
-
-foreach($id_kategori_array as $key => $id_kat){
-    if($id_kat != ""){
-        $berat_item = $berat_array[$key];
-        $q = mysqli_query($conn, "SELECT harga_per_kg FROM kategori_sampah WHERE id_kategori='$id_kat'");
+mysqli_query($conn, "INSERT INTO setoran (tanggal_setor, id_nasabah, total_seluruh_harga, id_admin) VALUES ('$t', '$id_n', '$total', '$id_a')");
+$id_s = mysqli_insert_id($conn);
+foreach($id_k as $key => $val){
+    if($val != ""){
+        $brt = $b[$key];
+        $q = mysqli_query($conn, "SELECT harga_per_kg FROM kategori_sampah WHERE id_kategori='$val'");
         $d = mysqli_fetch_assoc($q);
-        $subtotal = $berat_item * $d['harga_per_kg'];
-
-        mysqli_query($conn, "INSERT INTO detail_setoran (id_setoran, id_kategori, berat_kg, subtotal_harga) VALUES ('$id_setoran_induk', '$id_kat', '$berat_item', '$subtotal')");
+        $sub = $brt * $d['harga_per_kg'];
+        mysqli_query($conn, "INSERT INTO detail_setoran (id_setoran, id_kategori, berat_kg, subtotal_harga) VALUES ('$id_s', '$val', '$brt', '$sub')");
     }
 }
-
-mysqli_query($conn, "UPDATE nasabah SET saldo = saldo + $total_seluruh_harga WHERE id_nasabah='$id_nasabah'");
-
+mysqli_query($conn, "UPDATE nasabah SET saldo = saldo + $total WHERE id_nasabah='$id_n'");
 header("location:setoran.php?status=sukses");
 ?>

@@ -18,7 +18,7 @@ include 'header.php';
                     <table class="table table-hover align-middle">
                         <thead class="table-light small fw-bold text-muted">
                             <tr>
-                                <th width="150">Tanggal</th>
+                                <th width="180">Waktu</th>
                                 <th>Rincian Sampah</th>
                                 <th class="text-end" width="180">Total Diterima</th>
                             </tr>
@@ -29,7 +29,7 @@ include 'header.php';
                             while($s = mysqli_fetch_array($q_setor)){
                             ?>
                             <tr>
-                                <td class="small"><?php echo date('d M Y', strtotime($s['tanggal_setor'])); ?></td>
+                                <td class="small"><?php echo date('d M Y - H:i', strtotime($s['tanggal_setor'])); ?></td>
                                 <td class="small text-muted"><?php echo $s['rincian']; ?></td>
                                 <td class="text-end fw-bold text-success">+ Rp <?php echo number_format($s['total_seluruh_harga'],0,',','.'); ?></td>
                             </tr>
@@ -44,7 +44,7 @@ include 'header.php';
                     <table class="table table-hover align-middle">
                         <thead class="table-light small fw-bold text-muted">
                             <tr>
-                                <th width="150">Tanggal</th>
+                                <th width="180">Waktu</th>
                                 <th class="text-end">Nominal Ditarik</th>
                             </tr>
                         </thead>
@@ -54,7 +54,7 @@ include 'header.php';
                             while($p = mysqli_fetch_array($q_tarik)){
                             ?>
                             <tr>
-                                <td class="small"><?php echo date('d M Y', strtotime($p['tanggal_tarik'])); ?></td>
+                                <td class="small"><?php echo date('d M Y - H:i', strtotime($p['tanggal_tarik'])); ?></td>
                                 <td class="text-end fw-bold text-danger">- Rp <?php echo number_format($p['total'],0,',','.'); ?></td>
                             </tr>
                             <?php } ?>
