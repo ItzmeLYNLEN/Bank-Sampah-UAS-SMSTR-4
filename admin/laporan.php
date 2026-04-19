@@ -1,18 +1,11 @@
 <?php
 session_start();
 include '../koneksi.php';
-
-if($_SESSION['status'] != "login"){
-    header("location:../index.php?pesan=belum_login");
-    exit();
-}
-
+if($_SESSION['status'] != "login"){ header("location:../index.php?pesan=belum_login"); exit(); }
 $tgl_awal = isset($_GET['tgl_awal']) ? $_GET['tgl_awal'] : date('Y-m-01');
 $tgl_akhir = isset($_GET['tgl_akhir']) ? $_GET['tgl_akhir'] : date('Y-m-t');
-
 include 'template/header.php';
 ?>
-
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4 no-print">
         <h3 class="fw-bold">Laporan Transaksi</h3>
@@ -20,8 +13,7 @@ include 'template/header.php';
             <i class="fa-solid fa-print"></i> Cetak Laporan
         </button>
     </div>
-
-    <div class="card p-4 mb-4 no-print shadow-sm">
+    <div class="card p-4 mb-4 no-print shadow-sm border-0">
         <form method="GET" action="laporan.php" class="row g-3 align-items-end">
             <div class="col-md-4">
                 <label class="form-label small fw-bold">Dari Tanggal</label>
@@ -36,12 +28,10 @@ include 'template/header.php';
             </div>
         </form>
     </div>
-
     <div class="text-center mb-5 mt-4">
         <h3 class="fw-bold mb-1">REKAPITULASI BANK SAMPAH</h3>
         <p class="text-muted">Periode: <?php echo date('d M Y', strtotime($tgl_awal)); ?> - <?php echo date('d M Y', strtotime($tgl_akhir)); ?></p>
     </div>
-
     <div class="card p-4 mb-4 border-0 shadow-sm">
         <h5 class="fw-bold mb-3 text-success border-bottom pb-2">1. Laporan Setoran Sampah</h5>
         <div class="table-responsive">
@@ -81,7 +71,6 @@ include 'template/header.php';
             </table>
         </div>
     </div>
-
     <div class="card p-4 border-0 shadow-sm">
         <h5 class="fw-bold mb-3 text-danger border-bottom pb-2">2. Laporan Penarikan Tunai</h5>
         <div class="table-responsive">
@@ -98,7 +87,7 @@ include 'template/header.php';
                     <?php
                     $no = 1;
                     $total_keluar = 0;
-                    $q_penarikan = mysqli_query($conn, "SELECT p.tanggal_tarik, n.nama_nasabah, SUM(p.nominal_tarik) as total FROM penarikan p JOIN nasabah n ON p.id_nasabah = n.id_nasabah WHERE p.tanggal_tarik BETWEEN '$tgl_awal' AND '$tgl_akhir' GROUP BY p.tanggal_tarik, n.id_nasabah ORDER BY p.tanggal_tarik ASC");
+                    $q_penarikan = mysqli_query($conn, "SELECT p.tanggal_tarik, n.nama_nasabah, p.nominal_tarik as total FROM penarikan p JOIN nasabah n ON p.id_nasabah = n.id_nasabah WHERE p.tanggal_tarik BETWEEN '$tgl_awal' AND '$tgl_akhir' ORDER BY p.tanggal_tarik ASC");
                     while($p = mysqli_fetch_array($q_penarikan)){
                         $total_keluar += $p['total'];
                     ?>
@@ -120,5 +109,4 @@ include 'template/header.php';
         </div>
     </div>
 </div>
-
 <?php include 'template/footer.php'; ?>

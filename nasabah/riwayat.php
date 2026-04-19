@@ -1,12 +1,7 @@
 <?php
 session_start();
 include '../koneksi.php';
-
-if($_SESSION['status_nasabah'] != "login"){ 
-    header("location:../index.php?pesan=belum_login"); 
-    exit(); 
-}
-
+if($_SESSION['status_nasabah'] != "login"){ header("location:../index.php?pesan=belum_login"); exit(); }
 $id = $_SESSION['id_nasabah'];
 include 'header.php';
 ?>
@@ -15,7 +10,6 @@ include 'header.php';
         <h3 class="fw-bold">Riwayat Transaksi</h3>
         <p class="text-muted small">Catatan seluruh aktivitas setoran dan penarikan saldo Anda.</p>
     </div>
-
     <div class="row g-4">
         <div class="col-12">
             <div class="card p-4 border-0 shadow-sm mb-4">
@@ -44,7 +38,6 @@ include 'header.php';
                     </table>
                 </div>
             </div>
-
             <div class="card p-4 border-0 shadow-sm">
                 <h6 class="fw-bold text-danger mb-3"><i class="fa-solid fa-arrow-up-long"></i> Penarikan Tunai (Keluar)</h6>
                 <div class="table-responsive">
@@ -57,7 +50,7 @@ include 'header.php';
                         </thead>
                         <tbody>
                             <?php
-                            $q_tarik = mysqli_query($conn, "SELECT tanggal_tarik, SUM(nominal_tarik) as total FROM penarikan WHERE id_nasabah='$id' GROUP BY tanggal_tarik ORDER BY tanggal_tarik DESC");
+                            $q_tarik = mysqli_query($conn, "SELECT tanggal_tarik, nominal_tarik as total FROM penarikan WHERE id_nasabah='$id' ORDER BY tanggal_tarik DESC");
                             while($p = mysqli_fetch_array($q_tarik)){
                             ?>
                             <tr>

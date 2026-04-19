@@ -2,17 +2,22 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const toggleBtn = document.getElementById('toggleSidebar');
-    const sidebar = document.getElementById('sidebar');
-    if(toggleBtn) { toggleBtn.addEventListener('click', () => { sidebar.classList.toggle('active'); }); }
-    const currentPath = window.location.pathname.split("/").pop();
-    document.querySelectorAll('.nav-link').forEach(link => {
-        if(link.getAttribute('href') === currentPath || (currentPath === "" && link.getAttribute('href') === "index.php")) { link.classList.add('active'); }
+    const btnT = document.getElementById('toggleSidebar');
+    const sideE = document.getElementById('sidebar');
+    if(btnT) { btnT.addEventListener('click', (e) => { e.preventDefault(); sideE.classList.toggle('active'); }); }
+    
+    const path = window.location.pathname.split("/").pop();
+    document.querySelectorAll('.nav-link').forEach(l => { 
+        const hrefPath = l.getAttribute('href').split("/").pop();
+        if(hrefPath === path || (path === "" && hrefPath === "index.php")) { 
+            l.classList.add('active'); 
+        } 
     });
-    function konfirmasiLogout() {
-        Swal.fire({ title: 'Yakin ingin keluar?', icon: 'question', showCancelButton: true, confirmButtonColor: '#198754', cancelButtonColor: '#d33', confirmButtonText: 'Ya, Keluar!' }).then((result) => {
-            if (result.isConfirmed) { window.location.href = 'logout.php'; }
-        })
+    
+    function konfirmasiLogout(url) {
+        Swal.fire({ title: 'Yakin keluar?', icon: 'question', showCancelButton: true, confirmButtonColor: '#198754', cancelButtonColor: '#d33', confirmButtonText: 'Ya' }).then((r) => { 
+            if (r.isConfirmed) { window.location.href = url; } 
+        });
     }
 </script>
 </body>
