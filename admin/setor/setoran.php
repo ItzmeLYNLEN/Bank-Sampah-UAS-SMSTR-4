@@ -15,6 +15,7 @@ while($dk = mysqli_fetch_array($k)){
 
 include '../template/header.php';
 ?>
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
 
 <div class="container-fluid">
     <div class="mb-4">
@@ -26,9 +27,9 @@ include '../template/header.php';
         <form method="POST" action="setoran_proses.php">
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <label class="form-label fw-bold small">Nama Nasabah</label>
-                    <select name="id_nasabah" class="form-select form-select-lg" required>
-                        <option value="">-- Pilih Nasabah --</option>
+                    <label class="form-label fw-bold small">Cari & Pilih Nasabah</label>
+                    <select id="cari-nasabah-setoran" name="id_nasabah" placeholder="Ketik nama nasabah..." autocomplete="off" required>
+                        <option value="">Ketik nama nasabah...</option>
                         <?php
                         $n = mysqli_query($conn, "SELECT * FROM nasabah ORDER BY nama_nasabah ASC");
                         while($dn = mysqli_fetch_array($n)){
@@ -76,7 +77,16 @@ include '../template/header.php';
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 <script>
+    new TomSelect("#cari-nasabah-setoran", {
+        create: false,
+        sortField: {
+            field: "text",
+            direction: "asc"
+        }
+    });
+
     function tambahBaris() {
         var table = document.getElementById("tabelSampah").getElementsByTagName('tbody')[0];
         var row = table.insertRow();
@@ -102,19 +112,9 @@ include '../template/header.php';
 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('status') === 'sukses') {
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil',
-            text: 'Transaksi setoran telah dicatat!',
-            confirmButtonColor: '#198754'
-        });
+        Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Transaksi setoran telah dicatat!', confirmButtonColor: '#198754' });
     } else if (urlParams.get('status') === 'gagal') {
-        Swal.fire({
-            icon: 'error',
-            title: 'Gagal',
-            text: 'Terjadi kesalahan saat menyimpan transaksi.',
-            confirmButtonColor: '#d33'
-        });
+        Swal.fire({ icon: 'error', title: 'Gagal', text: 'Terjadi kesalahan saat menyimpan transaksi.', confirmButtonColor: '#d33' });
     }
 </script>
 
