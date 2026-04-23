@@ -1,16 +1,31 @@
 <?php
 session_start();
 include '../koneksi.php';
-if($_SESSION['status'] != "login"){ header("location:../index.php?pesan=belum_login"); exit(); }
+
+if($_SESSION['status'] != "login"){
+    header("location:../index.php?pesan=belum_login");
+    exit();
+}
+
 $tgl_awal = isset($_GET['tgl_awal']) ? $_GET['tgl_awal'] : date('Y-m-01');
 $tgl_akhir = isset($_GET['tgl_akhir']) ? $_GET['tgl_akhir'] : date('Y-m-t');
+
 include 'template/header.php';
 ?>
+
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4 no-print">
         <h3 class="fw-bold">Laporan Transaksi</h3>
-        <button onclick="window.print()" class="btn btn-primary fw-bold shadow-sm"><i class="fa-solid fa-print"></i> Cetak Laporan</button>
+        <div>
+            <a href="laporan_excel.php?tgl_awal=<?php echo $tgl_awal; ?>&tgl_akhir=<?php echo $tgl_akhir; ?>" class="btn btn-success fw-bold shadow-sm me-2">
+                <i class="fa-solid fa-file-excel"></i> Eksport Excel
+            </a>
+            <button onclick="window.print()" class="btn btn-primary fw-bold shadow-sm">
+                <i class="fa-solid fa-print"></i> Cetak Laporan
+            </button>
+        </div>
     </div>
+
     <div class="card p-4 mb-4 no-print shadow-sm border-0">
         <form method="GET" action="laporan.php" class="row g-3 align-items-end">
             <div class="col-md-4">
@@ -26,10 +41,12 @@ include 'template/header.php';
             </div>
         </form>
     </div>
+
     <div class="text-center mb-5 mt-4">
         <h3 class="fw-bold mb-1">REKAPITULASI BANK SAMPAH</h3>
         <p class="text-muted">Periode: <?php echo date('d M Y', strtotime($tgl_awal)); ?> - <?php echo date('d M Y', strtotime($tgl_akhir)); ?></p>
     </div>
+
     <div class="card p-4 mb-4 border-0 shadow-sm">
         <h5 class="fw-bold mb-3 text-success border-bottom pb-2">1. Laporan Setoran Sampah</h5>
         <div class="table-responsive">
@@ -45,7 +62,8 @@ include 'template/header.php';
                 </thead>
                 <tbody>
                     <?php
-                    $no = 1; $total_masuk = 0;
+                    $no = 1;
+                    $total_masuk = 0;
                     $q_setoran = mysqli_query($conn, "SELECT s.tanggal_setor, n.nama_nasabah, GROUP_CONCAT(CONCAT(k.nama_kategori, ' (', d.berat_kg, ' Kg)') SEPARATOR '<br>') as rincian, s.total_seluruh_harga FROM setoran s JOIN nasabah n ON s.id_nasabah = n.id_nasabah JOIN detail_setoran d ON s.id_setoran = d.id_setoran JOIN kategori_sampah k ON d.id_kategori = k.id_kategori WHERE s.tanggal_setor BETWEEN '$tgl_awal 00:00:00' AND '$tgl_akhir 23:59:59' GROUP BY s.id_setoran ORDER BY s.tanggal_setor ASC");
                     while($s = mysqli_fetch_array($q_setoran)){
                         $total_masuk += $s['total_seluruh_harga'];
@@ -68,6 +86,7 @@ include 'template/header.php';
             </table>
         </div>
     </div>
+
     <div class="card p-4 border-0 shadow-sm">
         <h5 class="fw-bold mb-3 text-danger border-bottom pb-2">2. Laporan Penarikan Tunai</h5>
         <div class="table-responsive">
@@ -82,7 +101,8 @@ include 'template/header.php';
                 </thead>
                 <tbody>
                     <?php
-                    $no = 1; $total_keluar = 0;
+                    $no = 1;
+                    $total_keluar = 0;
                     $q_penarikan = mysqli_query($conn, "SELECT p.tanggal_tarik, n.nama_nasabah, p.nominal_tarik as total FROM penarikan p JOIN nasabah n ON p.id_nasabah = n.id_nasabah WHERE p.tanggal_tarik BETWEEN '$tgl_awal 00:00:00' AND '$tgl_akhir 23:59:59' ORDER BY p.tanggal_tarik ASC");
                     while($p = mysqli_fetch_array($q_penarikan)){
                         $total_keluar += $p['total'];
@@ -105,4 +125,5 @@ include 'template/header.php';
         </div>
     </div>
 </div>
+
 <?php include 'template/footer.php'; ?>
