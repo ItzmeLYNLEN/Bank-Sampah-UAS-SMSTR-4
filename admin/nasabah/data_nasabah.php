@@ -44,6 +44,10 @@ include '../template/header.php';
 
         <div class="col-lg-8">
             <div class="card p-4 shadow-sm border-0">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0">Daftar Nasabah</h5>
+                    <input type="text" id="cariNasabah" class="form-control w-50" placeholder="Cari nama nasabah...">
+                </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
@@ -55,7 +59,7 @@ include '../template/header.php';
                                 <th class="text-center" width="120">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tabelNasabah">
                             <?php
                             $no = 1;
                             $data = mysqli_query($conn, "SELECT * FROM nasabah ORDER BY nama_nasabah ASC");
@@ -64,7 +68,7 @@ include '../template/header.php';
                             <tr>
                                 <td><?php echo $no++; ?></td>
                                 <td>
-                                    <div class="fw-bold"><?php echo $row['nama_nasabah']; ?></div>
+                                    <div class="fw-bold nama-nasabah"><?php echo $row['nama_nasabah']; ?></div>
                                     <div class="small text-muted"><?php echo $row['alamat']; ?></div>
                                 </td>
                                 <td><?php echo $row['no_hp']; ?></td>
@@ -124,10 +128,24 @@ include '../template/header.php';
 </div>
 
 <script>
+    document.getElementById('cariNasabah').addEventListener('keyup', function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('#tabelNasabah tr');
+        
+        rows.forEach(row => {
+            let nama = row.querySelector('.nama-nasabah').textContent.toLowerCase();
+            if(nama.includes(filter)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
     function konfirmasiHapusNasabah(id) {
         Swal.fire({
             title: 'Hapus Nasabah?',
-            text: "Data transaksi nasabah ini juga akan diperiksa sebelum penghapusan.",
+            text: "Data nasabah akan dihapus dari sistem.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
@@ -148,6 +166,13 @@ include '../template/header.php';
             title: 'Berhasil',
             text: 'Data nasabah telah diperbarui!',
             confirmButtonColor: '#198754'
+        });
+    } else if (urlParams.get('status') === 'gagal_saldo') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal Hapus',
+            text: 'Nasabah tidak dapat dihapus karena masih memiliki saldo tabungan!',
+            confirmButtonColor: '#d33'
         });
     } else if (urlParams.get('status') === 'gagal_transaksi') {
         Swal.fire({
