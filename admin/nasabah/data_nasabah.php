@@ -77,7 +77,7 @@ include '../template/header.php';
                                     <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editNasabah<?php echo $row['id_nasabah']; ?>">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
-                                    <button class="btn btn-outline-danger btn-sm" onclick="konfirmasiHapusNasabah(<?php echo $row['id_nasabah']; ?>)">
+                                    <button class="btn btn-outline-danger btn-sm" onclick="konfirmasiHapusNasabah('<?php echo $row['id_nasabah']; ?>')">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </td>

@@ -60,7 +60,7 @@ include '../template/header.php';
                                     <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $row['id_kategori']; ?>">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
-                                    <button class="btn btn-outline-danger btn-sm" onclick="konfirmasiHapus(<?php echo $row['id_kategori']; ?>)">
+                                    <button class="btn btn-outline-danger btn-sm" onclick="konfirmasiHapus('<?php echo $row['id_kategori']; ?>')">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </td>
