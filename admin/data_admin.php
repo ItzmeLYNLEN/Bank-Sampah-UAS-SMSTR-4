@@ -6,7 +6,7 @@ if($_SESSION['status'] != "login"){ header("location:../index.php?pesan=belum_lo
 if(isset($_POST['tambah'])){
     $nama = $_POST['nama_admin'];
     $username = $_POST['username'];
-    $password = md5($_POST['password']);
+    $password = $_POST['password'];
 
     $query_id = mysqli_query($conn, "SELECT MAX(id_admin) as id_max FROM admin");
     $data_id = mysqli_fetch_assoc($query_id);
@@ -36,7 +36,7 @@ if(isset($_POST['edit'])){
     $nama = $_POST['nama_admin'];
     $username = $_POST['username'];
     if(!empty($_POST['password'])){
-        $password = md5($_POST['password']);
+        $password = $_POST['password'];
         mysqli_query($conn, "UPDATE admin SET nama_admin='$nama', username='$username', password='$password' WHERE id_admin='$id'");
     } else {
         mysqli_query($conn, "UPDATE admin SET nama_admin='$nama', username='$username' WHERE id_admin='$id'");

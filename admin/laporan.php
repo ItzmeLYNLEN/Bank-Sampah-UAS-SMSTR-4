@@ -51,9 +51,10 @@ include 'template/header.php';
                 <thead class="table-light text-center small fw-bold">
                     <tr>
                         <th width="50">No</th>
-                        <th width="180">Waktu</th>
+                        <th width="150">Waktu</th>
                         <th>Nama Nasabah</th>
                         <th>Rincian (Berat)</th>
+                        <th>Petugas</th>
                         <th width="150">Total Harga</th>
                     </tr>
                 </thead>
@@ -61,7 +62,7 @@ include 'template/header.php';
                     <?php
                     $no = 1;
                     $total_masuk = 0;
-                    $q_setoran = mysqli_query($conn, "SELECT s.tanggal_setor, n.nama_nasabah, GROUP_CONCAT(CONCAT(k.nama_kategori, ' (', d.berat_kg, ' Kg)') SEPARATOR '<br>') as rincian, s.total_seluruh_harga FROM setoran s JOIN nasabah n ON s.id_nasabah = n.id_nasabah JOIN detail_setoran d ON s.id_setoran = d.id_setoran JOIN kategori_sampah k ON d.id_kategori = k.id_kategori WHERE s.tanggal_setor BETWEEN '$tgl_awal 00:00:00' AND '$tgl_akhir 23:59:59' GROUP BY s.id_setoran ORDER BY s.tanggal_setor ASC");
+                    $q_setoran = mysqli_query($conn, "SELECT s.tanggal_setor, n.nama_nasabah, a.nama_admin, GROUP_CONCAT(CONCAT(k.nama_kategori, ' (', d.berat_kg, ' Kg)') SEPARATOR '<br>') as rincian, s.total_seluruh_harga FROM setoran s JOIN nasabah n ON s.id_nasabah = n.id_nasabah JOIN admin a ON s.id_admin = a.id_admin JOIN detail_setoran d ON s.id_setoran = d.id_setoran JOIN kategori_sampah k ON d.id_kategori = k.id_kategori WHERE s.tanggal_setor BETWEEN '$tgl_awal 00:00:00' AND '$tgl_akhir 23:59:59' GROUP BY s.id_setoran ORDER BY s.tanggal_setor ASC");
                     while($s = mysqli_fetch_array($q_setoran)){
                         $total_masuk += $s['total_seluruh_harga'];
                     ?>
@@ -70,13 +71,14 @@ include 'template/header.php';
                         <td class="text-center small"><?php echo date('d M Y - H:i', strtotime($s['tanggal_setor'])); ?></td>
                         <td><?php echo $s['nama_nasabah']; ?></td>
                         <td class="small text-muted"><?php echo $s['rincian']; ?></td>
+                        <td class="small"><?php echo $s['nama_admin']; ?></td>
                         <td class="text-end fw-bold text-success">Rp <?php echo number_format($s['total_seluruh_harga'],0,',','.'); ?></td>
                     </tr>
                     <?php } ?>
                 </tbody>
                 <tfoot class="table-light fw-bold">
                     <tr>
-                        <td colspan="4" class="text-end">TOTAL PEMASUKAN</td>
+                        <td colspan="5" class="text-end">TOTAL PEMASUKAN</td>
                         <td class="text-end text-success">Rp <?php echo number_format($total_masuk,0,',','.'); ?></td>
                     </tr>
                 </tfoot>
@@ -91,8 +93,9 @@ include 'template/header.php';
                 <thead class="table-light text-center small fw-bold">
                     <tr>
                         <th width="50">No</th>
-                        <th width="180">Waktu</th>
+                        <th width="150">Waktu</th>
                         <th>Nama Nasabah</th>
+                        <th>Petugas</th>
                         <th width="150">Nominal Ditarik</th>
                     </tr>
                 </thead>
@@ -100,7 +103,7 @@ include 'template/header.php';
                     <?php
                     $no = 1;
                     $total_keluar = 0;
-                    $q_penarikan = mysqli_query($conn, "SELECT p.tanggal_tarik, n.nama_nasabah, p.nominal_tarik as total FROM penarikan p JOIN nasabah n ON p.id_nasabah = n.id_nasabah WHERE p.tanggal_tarik BETWEEN '$tgl_awal 00:00:00' AND '$tgl_akhir 23:59:59' ORDER BY p.tanggal_tarik ASC");
+                    $q_penarikan = mysqli_query($conn, "SELECT p.tanggal_tarik, n.nama_nasabah, a.nama_admin, p.nominal_tarik as total FROM penarikan p JOIN nasabah n ON p.id_nasabah = n.id_nasabah JOIN admin a ON p.id_admin = a.id_admin WHERE p.tanggal_tarik BETWEEN '$tgl_awal 00:00:00' AND '$tgl_akhir 23:59:59' ORDER BY p.tanggal_tarik ASC");
                     while($p = mysqli_fetch_array($q_penarikan)){
                         $total_keluar += $p['total'];
                     ?>
@@ -108,13 +111,14 @@ include 'template/header.php';
                         <td class="text-center"><?php echo $no++; ?></td>
                         <td class="text-center small"><?php echo date('d M Y - H:i', strtotime($p['tanggal_tarik'])); ?></td>
                         <td><?php echo $p['nama_nasabah']; ?></td>
+                        <td class="small"><?php echo $p['nama_admin']; ?></td>
                         <td class="text-end fw-bold text-danger">Rp <?php echo number_format($p['total'],0,',','.'); ?></td>
                     </tr>
                     <?php } ?>
                 </tbody>
                 <tfoot class="table-light fw-bold">
                     <tr>
-                        <td colspan="3" class="text-end">TOTAL PENGELUARAN</td>
+                        <td colspan="4" class="text-end">TOTAL PENGELUARAN</td>
                         <td class="text-end text-danger">Rp <?php echo number_format($total_keluar,0,',','.'); ?></td>
                     </tr>
                 </tfoot>
