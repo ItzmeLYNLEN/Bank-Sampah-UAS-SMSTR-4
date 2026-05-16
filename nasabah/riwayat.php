@@ -15,7 +15,7 @@ include 'header.php';
             <div class="card p-4 border-0 shadow-sm mb-4">
                 <h6 class="fw-bold text-success mb-3"><i class="fa-solid fa-arrow-down-long"></i> Tabungan Sampah (Masuk)</h6>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover table-bordered align-middle w-100">
                         <thead class="table-light small fw-bold text-muted">
                             <tr>
                                 <th width="180">Waktu</th>
@@ -41,7 +41,7 @@ include 'header.php';
             <div class="card p-4 border-0 shadow-sm">
                 <h6 class="fw-bold text-danger mb-3"><i class="fa-solid fa-arrow-up-long"></i> Penarikan Tunai (Keluar)</h6>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover table-bordered align-middle w-100">
                         <thead class="table-light small fw-bold text-muted">
                             <tr>
                                 <th width="180">Waktu</th>

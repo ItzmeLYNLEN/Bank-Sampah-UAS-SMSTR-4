@@ -46,7 +46,6 @@ include '../template/header.php';
             <div class="card p-4 shadow-sm border-0">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold mb-0">Daftar Nasabah</h5>
-                    <input type="text" id="cariNasabah" class="form-control w-50" placeholder="Cari nama nasabah...">
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">

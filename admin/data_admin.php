@@ -54,19 +54,19 @@ include 'template/header.php';
             <h3 class="fw-bold">Data Admin / Petugas</h3>
             <p class="text-muted small">Kelola hak akses pengguna sistem informasi.</p>
         </div>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah"><i class="fa-solid fa-user-plus me-2"></i>Tambah Admin</button>
+        <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambah"><i class="fa-solid fa-user-plus me-2"></i>Tambah Admin</button>
     </div>
 
     <div class="card border-0 shadow-sm">
-        <div class="card-body p-0">
+        <div class="card-body p-4">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-hover table-bordered align-middle w-100 mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th class="px-4 py-3" style="width: 10%">No</th>
-                            <th class="py-3">Nama Lengkap</th>
-                            <th class="py-3">Username</th>
-                            <th class="px-4 py-3 text-end" style="width: 20%">Aksi</th>
+                            <th class="px-4 py-3 text-center" style="width: 5%">No</th>
+                            <th class="px-4 py-3">Nama Lengkap</th>
+                            <th class="px-4 py-3">Username</th>
+                            <th class="px-4 py-3 text-center" style="width: 15%">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,10 +76,10 @@ include 'template/header.php';
                         while($data = mysqli_fetch_assoc($query)):
                         ?>
                         <tr>
-                            <td class="px-4"><?php echo $no++; ?></td>
-                            <td class="fw-bold"><?php echo $data['nama_admin']; ?></td>
-                            <td><span class="badge bg-secondary bg-opacity-10 text-secondary px-3 py-2"><?php echo $data['username']; ?></span></td>
-                            <td class="px-4 text-end">
+                            <td class="px-4 text-center"><?php echo $no++; ?></td>
+                            <td class="px-4 fw-bold"><?php echo $data['nama_admin']; ?></td>
+                            <td class="px-4"><span class="badge bg-secondary bg-opacity-10 text-secondary px-3 py-2"><?php echo $data['username']; ?></span></td>
+                            <td class="px-4 text-center">
                                 <button class="btn btn-sm btn-warning text-white me-1" data-bs-toggle="modal" data-bs-target="#modalEdit<?php echo $data['id_admin']; ?>"><i class="fa-solid fa-pen-to-square"></i></button>
                                 <a href="#" class="btn btn-sm btn-danger btn-hapus" data-href="data_admin.php?hapus=<?php echo $data['id_admin']; ?>"><i class="fa-solid fa-trash"></i></a>
                             </td>

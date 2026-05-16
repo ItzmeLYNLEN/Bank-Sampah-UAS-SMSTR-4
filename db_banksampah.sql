@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 19, 2026 at 02:21 AM
+-- Generation Time: May 16, 2026 at 10:50 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.10
 
@@ -28,18 +28,19 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `admin` (
-  `id_admin` int NOT NULL,
-  `nama_admin` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id_admin` varchar(10) NOT NULL,
+  `nama_admin` varchar(100) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
 INSERT INTO `admin` (`id_admin`, `nama_admin`, `username`, `password`) VALUES
-(1, 'Administrator', 'admin', 'admin123');
+('ADM-002', 'Daoa Suami Zee', 'daoa', '123'),
+('ADM-01', 'Administrator', 'admin', 'admin123');
 
 -- --------------------------------------------------------
 
@@ -48,24 +49,24 @@ INSERT INTO `admin` (`id_admin`, `nama_admin`, `username`, `password`) VALUES
 --
 
 CREATE TABLE `detail_setoran` (
-  `id_detail` int NOT NULL,
-  `id_setoran` int NOT NULL,
-  `id_kategori` int NOT NULL,
+  `id_detail` bigint NOT NULL,
+  `id_setoran` varchar(30) NOT NULL,
+  `id_kategori` varchar(10) NOT NULL,
   `berat_kg` float NOT NULL,
   `subtotal_harga` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `detail_setoran`
 --
 
 INSERT INTO `detail_setoran` (`id_detail`, `id_setoran`, `id_kategori`, `berat_kg`, `subtotal_harga`) VALUES
-(1, 5, 1, 3, 6000),
-(2, 5, 3, 5, 20000),
-(3, 5, 2, 1, 1500),
-(4, 6, 1, 1, 2000),
-(5, 7, 1, 1, 2000),
-(6, 8, 2, 2, 3000);
+(426042800101, 'TRX-S-260428-001', 'ALU-01', 5, 25000),
+(426042800102, 'TRX-S-260428-001', 'KER-01', 7, 14000),
+(426042900101, 'TRX-S-260429-001', 'ALU-01', 2, 10000),
+(426042900102, 'TRX-S-260429-001', 'BES-01', 1, 8000),
+(426042900201, 'TRX-S-260429-002', 'KER-01', 1, 2000),
+(426042900301, 'TRX-S-260429-003', 'KER-02', 1, 1500);
 
 -- --------------------------------------------------------
 
@@ -74,19 +75,20 @@ INSERT INTO `detail_setoran` (`id_detail`, `id_setoran`, `id_kategori`, `berat_k
 --
 
 CREATE TABLE `kategori_sampah` (
-  `id_kategori` int NOT NULL,
-  `nama_kategori` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `id_kategori` varchar(10) NOT NULL,
+  `nama_kategori` varchar(50) NOT NULL,
   `harga_per_kg` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `kategori_sampah`
 --
 
 INSERT INTO `kategori_sampah` (`id_kategori`, `nama_kategori`, `harga_per_kg`) VALUES
-(1, 'Kardus', 2000),
-(2, 'Botol Plastik', 1500),
-(3, 'Besi', 4000);
+('ALU-01', 'Alumunium', 5000),
+('BES-01', 'Besi Padat', 8000),
+('KER-01', 'Kertas HVS', 2000),
+('KER-02', 'Kertas Koran', 1500);
 
 -- --------------------------------------------------------
 
@@ -95,20 +97,21 @@ INSERT INTO `kategori_sampah` (`id_kategori`, `nama_kategori`, `harga_per_kg`) V
 --
 
 CREATE TABLE `nasabah` (
-  `id_nasabah` int NOT NULL,
-  `nama_nasabah` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `alamat` text COLLATE utf8mb4_general_ci NOT NULL,
-  `no_hp` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `id_nasabah` varchar(20) NOT NULL,
+  `nama_nasabah` varchar(100) NOT NULL,
+  `alamat` text NOT NULL,
+  `no_hp` varchar(15) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `saldo` int DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `nasabah`
 --
 
 INSERT INTO `nasabah` (`id_nasabah`, `nama_nasabah`, `alamat`, `no_hp`, `password`, `saldo`) VALUES
-(1, 'daoa', 'jauh', '054005', '2225', 46000);
+('NSB-2604-001', 'ilyas', 'bb40', '123', '123', 45500),
+('NSB-2605-001', 'Taufik Hidayat', 'bb51', '0981231', '123', 0);
 
 -- --------------------------------------------------------
 
@@ -117,20 +120,20 @@ INSERT INTO `nasabah` (`id_nasabah`, `nama_nasabah`, `alamat`, `no_hp`, `passwor
 --
 
 CREATE TABLE `penarikan` (
-  `id_penarikan` int NOT NULL,
+  `id_penarikan` varchar(30) NOT NULL,
   `tanggal_tarik` datetime DEFAULT NULL,
-  `id_nasabah` int NOT NULL,
+  `id_nasabah` varchar(20) NOT NULL,
   `nominal_tarik` int NOT NULL,
-  `id_admin` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id_admin` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `penarikan`
 --
 
 INSERT INTO `penarikan` (`id_penarikan`, `tanggal_tarik`, `id_nasabah`, `nominal_tarik`, `id_admin`) VALUES
-(1, '2026-04-19 00:00:00', 1, 10000, 1),
-(2, '2026-04-19 00:00:00', 1, 2000, 1);
+('TRX-P-260428-001', '2026-04-28 17:11:30', 'NSB-2604-001', 10000, 'ADM-01'),
+('TRX-P-260428-002', '2026-04-28 17:15:43', 'NSB-2604-001', 5000, 'ADM-01');
 
 -- --------------------------------------------------------
 
@@ -139,26 +142,22 @@ INSERT INTO `penarikan` (`id_penarikan`, `tanggal_tarik`, `id_nasabah`, `nominal
 --
 
 CREATE TABLE `setoran` (
-  `id_setoran` int NOT NULL,
+  `id_setoran` varchar(30) NOT NULL,
   `tanggal_setor` datetime DEFAULT NULL,
-  `id_nasabah` int NOT NULL,
-  `id_admin` int NOT NULL,
+  `id_nasabah` varchar(20) NOT NULL,
+  `id_admin` varchar(10) NOT NULL,
   `total_seluruh_harga` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `setoran`
 --
 
 INSERT INTO `setoran` (`id_setoran`, `tanggal_setor`, `id_nasabah`, `id_admin`, `total_seluruh_harga`) VALUES
-(1, '2026-04-19 00:00:00', 1, 1, 0),
-(2, '2026-04-19 00:00:00', 1, 1, 0),
-(3, '2026-04-19 00:00:00', 1, 1, 0),
-(4, '2026-04-19 00:00:00', 1, 1, 0),
-(5, '2026-04-19 00:00:00', 1, 1, 27500),
-(6, '2026-04-19 00:00:00', 1, 1, 2000),
-(7, '2026-04-19 02:17:09', 1, 1, 2000),
-(8, '2026-04-19 09:18:53', 1, 1, 3000);
+('TRX-S-260428-001', '2026-04-28 17:10:30', 'NSB-2604-001', 'ADM-01', 39000),
+('TRX-S-260429-001', '2026-04-29 19:39:57', 'NSB-2604-001', 'ADM-01', 18000),
+('TRX-S-260429-002', '2026-04-29 19:40:18', 'NSB-2604-001', 'ADM-01', 2000),
+('TRX-S-260429-003', '2026-04-29 19:40:25', 'NSB-2604-001', 'ADM-01', 1500);
 
 --
 -- Indexes for dumped tables
@@ -207,46 +206,6 @@ ALTER TABLE `setoran`
   ADD KEY `id_admin` (`id_admin`);
 
 --
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `admin`
---
-ALTER TABLE `admin`
-  MODIFY `id_admin` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `detail_setoran`
---
-ALTER TABLE `detail_setoran`
-  MODIFY `id_detail` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `kategori_sampah`
---
-ALTER TABLE `kategori_sampah`
-  MODIFY `id_kategori` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `nasabah`
---
-ALTER TABLE `nasabah`
-  MODIFY `id_nasabah` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `penarikan`
---
-ALTER TABLE `penarikan`
-  MODIFY `id_penarikan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `setoran`
---
-ALTER TABLE `setoran`
-  MODIFY `id_setoran` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
 -- Constraints for dumped tables
 --
 
@@ -254,22 +213,22 @@ ALTER TABLE `setoran`
 -- Constraints for table `detail_setoran`
 --
 ALTER TABLE `detail_setoran`
-  ADD CONSTRAINT `detail_setoran_ibfk_1` FOREIGN KEY (`id_setoran`) REFERENCES `setoran` (`id_setoran`),
-  ADD CONSTRAINT `detail_setoran_ibfk_2` FOREIGN KEY (`id_kategori`) REFERENCES `kategori_sampah` (`id_kategori`);
+  ADD CONSTRAINT `detail_setoran_ibfk_1` FOREIGN KEY (`id_setoran`) REFERENCES `setoran` (`id_setoran`) ON DELETE CASCADE,
+  ADD CONSTRAINT `detail_setoran_ibfk_2` FOREIGN KEY (`id_kategori`) REFERENCES `kategori_sampah` (`id_kategori`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `penarikan`
 --
 ALTER TABLE `penarikan`
-  ADD CONSTRAINT `penarikan_ibfk_1` FOREIGN KEY (`id_nasabah`) REFERENCES `nasabah` (`id_nasabah`),
-  ADD CONSTRAINT `penarikan_ibfk_2` FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id_admin`);
+  ADD CONSTRAINT `penarikan_ibfk_1` FOREIGN KEY (`id_nasabah`) REFERENCES `nasabah` (`id_nasabah`) ON DELETE CASCADE,
+  ADD CONSTRAINT `penarikan_ibfk_2` FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id_admin`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `setoran`
 --
 ALTER TABLE `setoran`
-  ADD CONSTRAINT `setoran_ibfk_1` FOREIGN KEY (`id_nasabah`) REFERENCES `nasabah` (`id_nasabah`),
-  ADD CONSTRAINT `setoran_ibfk_3` FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id_admin`);
+  ADD CONSTRAINT `setoran_ibfk_1` FOREIGN KEY (`id_nasabah`) REFERENCES `nasabah` (`id_nasabah`) ON DELETE CASCADE,
+  ADD CONSTRAINT `setoran_ibfk_2` FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id_admin`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
