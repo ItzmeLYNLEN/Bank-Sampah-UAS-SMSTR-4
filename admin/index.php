@@ -8,15 +8,26 @@ $t_nasabah = mysqli_fetch_assoc($nasabah);
 $saldo = mysqli_query($conn, "SELECT SUM(saldo) as total FROM nasabah");
 $t_saldo = mysqli_fetch_assoc($saldo);
 
-$label_tgl = [];
-$data_setoran = [];
-$tgl_7_hari = date('Y-m-d', strtotime('-6 days'));
-$chart_query = mysqli_query($conn, "SELECT DATE(tanggal_setor) as tgl, SUM(total_seluruh_harga) as total FROM setoran WHERE tanggal_setor >= '$tgl_7_hari' GROUP BY DATE(tanggal_setor) ORDER BY tgl ASC");
+$b_sekarang = date('m');
+$tahun_sekarang = date('Y');
+
+$q_masuk = mysqli_query($conn, "SELECT SUM(total_seluruh_harga) as total FROM setoran WHERE MONTH(tanggal_setor)='$b_sekarang' AND YEAR(tanggal_setor)='$tahun_sekarang'");
+$t_masuk = mysqli_fetch_assoc($q_masuk);
+
+$q_keluar = mysqli_query($conn, "SELECT SUM(nominal_tarik) as total FROM penarikan WHERE MONTH(tanggal_tarik)='$b_sekarang' AND YEAR(tanggal_tarik)='$tahun_sekarang'");
+$t_keluar = mysqli_fetch_assoc($q_keluar);
+
+$data_per_bulan = array_fill_keys(range(1, 12), 0);
+
+$chart_query = mysqli_query($conn, "SELECT MONTH(tanggal_setor) as bulan_angka, SUM(total_seluruh_harga) as total FROM setoran WHERE YEAR(tanggal_setor) = '$tahun_sekarang' GROUP BY MONTH(tanggal_setor)");
 
 while($row = mysqli_fetch_assoc($chart_query)){
-    $label_tgl[] = date('d M', strtotime($row['tgl']));
-    $data_setoran[] = $row['total'];
+    $bulan_int = (int)$row['bulan_angka'];
+    $data_per_bulan[$bulan_int] = (float) $row['total'];
 }
+
+$label_tgl = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+$data_setoran = array_values($data_per_bulan);
 
 include 'template/header.php';
 ?>
@@ -26,29 +37,49 @@ include 'template/header.php';
         <h3 class="fw-bold">Dashboard Admin</h3>
         <p class="text-muted small">Statistik sistem dan tren transaksi terkini.</p>
     </div>
+    
     <div class="row g-4 mb-4">
-        <div class="col-md-4">
-            <div class="card p-4 border-start border-success border-5 shadow-sm">
-                <div class="d-flex align-items-center">
-                    <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3 text-success"><i class="fa-solid fa-users fa-2x"></i></div>
-                    <div><p class="text-muted mb-1 small fw-bold">TOTAL NASABAH</p><h3 class="fw-bold mb-0"><?php echo $t_nasabah['total']; ?></h3></div>
+        <div class="col-md-3">
+            <div class="card text-white bg-primary h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold opacity-75">JUMLAH NASABAH</h6>
+                    <p class="card-text fs-4 fw-bold mb-0"><?php echo $t_nasabah['total']; ?> Orang</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
-            <div class="card p-4 border-start border-primary border-5 shadow-sm">
-                <div class="d-flex align-items-center">
-                    <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3 text-primary"><i class="fa-solid fa-wallet fa-2x"></i></div>
-                    <div><p class="text-muted mb-1 small fw-bold">SALDO KESELURUHAN</p><h3 class="fw-bold mb-0 text-primary">Rp <?php echo number_format((float)$t_saldo['total'],0,',','.'); ?></h3></div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold opacity-75">SALDO KESELURUHAN</h6>
+                    <p class="card-text fs-4 fw-bold mb-0">Rp <?php echo number_format((float)$t_saldo['total'],0,',','.'); ?></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold opacity-75">SETORAN BULAN INI</h6>
+                    <p class="card-text fs-4 fw-bold mb-0">Rp <?php echo number_format((float)$t_masuk['total'],0,',','.'); ?></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold opacity-75">PENARIKAN BULAN INI</h6>
+                    <p class="card-text fs-4 fw-bold mb-0">Rp <?php echo number_format((float)$t_keluar['total'],0,',','.'); ?></p>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card p-4 shadow-sm border-0">
-                <h5 class="fw-bold mb-4">Tren Setoran (7 Hari Terakhir)</h5>
-                <canvas id="setoranChart" height="100"></canvas>
+                <h5 class="fw-bold mb-4">Grafik Pemasukan Setoran (Tahun <?php echo $tahun_sekarang; ?>)</h5>
+                <div>
+                    <canvas id="setoranChart" style="height: 320px; width: 100%;"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -56,21 +87,28 @@ include 'template/header.php';
 <script>
     const ctx = document.getElementById('setoranChart').getContext('2d');
     new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: <?php echo json_encode($label_tgl); ?>,
             datasets: [{
-                label: 'Total Setoran (Rp)',
+                label: 'Total Setoran',
                 data: <?php echo json_encode($data_setoran); ?>,
-                borderColor: '#198754',
-                backgroundColor: 'rgba(25, 135, 84, 0.1)',
-                fill: true,
-                tension: 0.4
+                backgroundColor: 'rgba(13, 110, 253, 0.8)'
             }]
         },
         options: {
             responsive: true,
-            scales: { y: { beginAtZero: true } }
+            maintainAspectRatio: false,
+            scales: { 
+                y: { 
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+                        }
+                    }
+                } 
+            }
         }
     });
 </script>

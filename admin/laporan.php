@@ -20,9 +20,6 @@ include 'template/header.php';
             <a href="laporan_excel.php?tgl_awal=<?php echo $tgl_awal; ?>&tgl_akhir=<?php echo $tgl_akhir; ?>" class="btn btn-success fw-bold shadow-sm me-2">
                 <i class="fa-solid fa-file-excel"></i> Eksport Excel
             </a>
-            <button onclick="window.print()" class="btn btn-primary fw-bold shadow-sm">
-                <i class="fa-solid fa-print"></i> Cetak Laporan
-            </button>
         </div>
     </div>
 

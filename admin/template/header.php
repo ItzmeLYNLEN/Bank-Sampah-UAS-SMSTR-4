@@ -38,6 +38,7 @@ $base_admin = ($current_dir == 'admin') ? '' : '../';
             <a href="<?php echo $base_admin; ?>setor/setoran.php" class="nav-link"><i class="fa-solid fa-arrow-down"></i> Setoran</a>
             <a href="<?php echo $base_admin; ?>penarikan/penarikan.php" class="nav-link"><i class="fa-solid fa-arrow-up"></i> Penarikan</a>
             <a href="<?php echo $base_admin; ?>laporan.php" class="nav-link"><i class="fa-solid fa-file-lines"></i> Laporan</a>
+            <a href="<?php echo $base_admin; ?>data_admin.php" class="nav-link"><i class="fa-solid fa-user-gear"></i> Kelola Admin</a>
             <div class="mt-5 p-3">
                 <a href="#" onclick="konfirmasiLogout('<?php echo $base_admin; ?>logout.php')" class="btn btn-outline-danger w-100 fw-bold">
                     <i class="fa-solid fa-right-from-bracket"></i> Logout

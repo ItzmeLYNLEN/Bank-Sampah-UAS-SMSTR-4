@@ -50,7 +50,7 @@ if(isset($_SESSION['status']) && $_SESSION['status'] == "login"){
             </form>
             <div class="mt-auto text-center small text-muted">
                 <p class="mb-0 fw-semibold">Sistem Informasi Bank Sampah</p>
-                <p>Klapanunggal, Kab. Bogor</p>
+                <p>Bank Sampah Teratai</p>
             </div>
         </div>
         <div class="overlay-panel text-white">
