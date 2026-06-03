@@ -10,14 +10,8 @@ if(isset($_POST['tambah'])){
 
     $query_id = mysqli_query($conn, "SELECT MAX(id_admin) as id_max FROM admin");
     $data_id = mysqli_fetch_assoc($query_id);
-    $id_max = $data_id['id_max'];
-    if($id_max){
-        $urutan = (int) substr($id_max, 4, 3);
-        $urutan++;
-    } else {
-        $urutan = 1;
-    }
-    $id_baru = "ADM-" . sprintf("%03s", $urutan);
+    $id_max = (int)$data_id['id_max'];
+    $id_baru = $id_max + 1;
 
     mysqli_query($conn, "INSERT INTO admin (id_admin, nama_admin, username, password) VALUES ('$id_baru', '$nama', '$username', '$password')");
     header("location:data_admin.php?pesan=tambah");
@@ -84,38 +78,6 @@ include 'template/header.php';
                                 <a href="#" class="btn btn-sm btn-danger btn-hapus" data-href="data_admin.php?hapus=<?php echo $data['id_admin']; ?>"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         </tr>
-
-                        <div class="modal fade" id="modalEdit<?php echo $data['id_admin']; ?>" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title fw-bold">Edit Data Admin</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <form action="" method="POST">
-                                        <div class="modal-body">
-                                            <input type="hidden" name="id_admin" value="<?php echo $data['id_admin']; ?>">
-                                            <div class="mb-3">
-                                                <label class="form-label small fw-bold text-muted">Nama Lengkap</label>
-                                                <input type="text" name="nama_admin" class="form-control" value="<?php echo $data['nama_admin']; ?>" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label small fw-bold text-muted">Username</label>
-                                                <input type="text" name="username" class="form-control" value="<?php echo $data['username']; ?>" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label small fw-bold text-muted">Password Baru</label>
-                                                <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak ingin diubah">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                            <button type="submit" name="edit" class="btn btn-primary">Simpan</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                         <?php endwhile; ?>
                     </tbody>
                 </table>
@@ -123,6 +85,43 @@ include 'template/header.php';
         </div>
     </div>
 </div>
+
+<?php
+$query_modal = mysqli_query($conn, "SELECT * FROM admin");
+while($data = mysqli_fetch_assoc($query_modal)):
+?>
+<div class="modal fade" id="modalEdit<?php echo $data['id_admin']; ?>" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Edit Data Admin</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="id_admin" value="<?php echo $data['id_admin']; ?>">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Nama Lengkap</label>
+                        <input type="text" name="nama_admin" class="form-control" value="<?php echo $data['nama_admin']; ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Username</label>
+                        <input type="text" name="username" class="form-control" value="<?php echo $data['username']; ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Password Baru</label>
+                        <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak ingin diubah">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" name="edit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php endwhile; ?>
 
 <div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
